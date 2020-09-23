@@ -1,6 +1,7 @@
 <?php
 /*
  * Простая PHP библиотека для работы с API AmoCRM
+ * https://github.com/Colin990/SimpleAmoApi
  * Документация Amocrm: https://www.amocrm.com/developers/content/api/account/
  * 
 */
@@ -56,11 +57,6 @@ class SimpleAmoApi {
 			}
 		}
 		
-			
-		echo '<pre>';
-		print_r($newTokens);
-		//die();
-		
 		return;
 	}
 	
@@ -106,6 +102,17 @@ class SimpleAmoApi {
 		$method = 'api/v2/leads';
 		
 		$response = $this->SendGETRequest( $method, $data );
+		$response = $this->formatResponse( $response );
+		
+		return $response;
+	}
+	
+	# https://www.amocrm.com/developers/content/api/leads/
+	function postLeads( $data = [] ){
+		$method = 'api/v2/leads';
+		
+		$response = $this->SendRequest( $method, $data, 1 );
+		$response = $this->formatResponse( $response );
 		
 		return $response;
 	}
@@ -115,6 +122,40 @@ class SimpleAmoApi {
 		$method = 'api/v2/contacts';
 		
 		$response = $this->SendGETRequest( $method, $data );
+		$response = $this->formatResponse( $response );
+		
+		return $response;
+	}
+	
+	# https://www.amocrm.com/developers/content/api/contacts/
+	function postContacts( $data = [] ){
+		$method = 'api/v2/contacts';
+		
+		$response = $this->SendRequest( $method, $data, 1 );
+		$response = $this->formatResponse( $response );
+		
+		return $response;
+	}
+	
+	# https://www.amocrm.com/developers/content/api/notes/
+	function postNotes( $data = [] ){
+		$method = 'api/v2/notes';
+		
+		$response = $this->SendRequest( $method, $data, 1 );
+		$response = $this->formatResponse( $response );
+		
+		return $response;
+	}
+	
+	function formatResponse( $response = [] ){
+		
+		if ( $response->update ) {
+			return $response->update;
+		}
+		
+		if ( $response->_embedded ) {
+			return $response->_embedded->items;
+		}
 		
 		return $response;
 	}
